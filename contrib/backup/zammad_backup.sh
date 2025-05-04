@@ -9,6 +9,37 @@ BACKUP_SCRIPT_PATH="$(dirname $(realpath $0))"
 # import functions
 . ${BACKUP_SCRIPT_PATH}/functions
 
+while getopts h?D:H:F:T:E:d opt; do
+  case $opt in
+    h|\?)
+      help
+      exit 0
+      ;;
+    D)
+      BACKUP_DIR="$OPTARG"
+      ;;
+    H)
+      HOLD_DAYS="$OPTARG"
+      ;;
+    F)
+      FULL_FS_DUMP="$OPTARG"
+      ;;
+    T)
+      TAR_ZIP_ARG="$OPTARG"
+      ;;
+    E)
+      TAR_FILE_EXT="$OPTARG"
+      ;;
+    d)
+      DEBUG='yes'
+      ;;
+    *)
+      echo "unhandled opt: $opt"
+      help
+      exit 1
+  esac
+done
+
 # ensure we have all options
 demand_backup_conf
 
