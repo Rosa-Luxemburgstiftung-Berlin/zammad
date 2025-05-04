@@ -129,11 +129,11 @@ backup_file_read_test () {
 
   if [ "${DEBUG}" == "yes" ]; then
     echo "I've been looking for these backup files: "
-    echo "- ${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.tar.gz"
+    echo "- ${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.${TAR_FILE_EXT}"
     echo "- ${BACKUP_DIR}/${RESTORE_DB_DATE}_zammad_db.${DB_FILE_EXT}.gz"
   fi
 
-  if [[ (! -r "${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.tar.gz") || (! -r "${BACKUP_DIR}/${RESTORE_DB_DATE}_zammad_db.${DB_FILE_EXT}.gz") ]]; then
+  if [[ (! -r "${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.${TAR_FILE_EXT}") || (! -r "${BACKUP_DIR}/${RESTORE_DB_DATE}_zammad_db.${DB_FILE_EXT}.gz") ]]; then
     echo -e "\n\n # ERROR - Cannot read on or more of my backup files. Double check permissions."
     echo -e " #-> RESTORE WAS NOT SUCCESSFUL"
     exit 3
@@ -154,7 +154,7 @@ function backup_files () {
 
   if [ "${FULL_FS_DUMP}" == 'yes' ]; then
     echo " ... as full dump"
-    tar -C / -czf ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz\
+    tar -C / -c ${TAR_ZIP_ARG} -f ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.${TAR_FILE_EXT}\
       --exclude='tmp' --exclude 'node_modules' --exclude '.git' --exclude '.yarn/cache' --exclude='config/database.yml' ${ZAMMAD_DIR#/}
 
     state=$?
@@ -180,7 +180,7 @@ function backup_files () {
       ZAMMAD_STORAGE_DIR="${ZAMMAD_DIR#/}/storage/"
     fi
 
-    tar -C / -czf ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz ${ZAMMAD_STORAGE_DIR}
+    tar -C / -c ${TAR_ZIP_ARG} -f ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.${TAR_FILE_EXT} ${ZAMMAD_STORAGE_DIR}
 
     state=$?
   fi
@@ -197,7 +197,7 @@ function backup_files () {
     echo "- This indicates your Zammad instance is running and thus may be normal."
   fi
 
-  ln -sfn ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz ${BACKUP_DIR}/latest_zammad_files.tar.gz
+  ln -sfn ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.${TAR_FILE_EXT} ${BACKUP_DIR}/latest_zammad_files.${TAR_FILE_EXT}
 }
 
 function create_pgpassfile() {
@@ -247,7 +247,7 @@ function backup_db () {
 
 function backup_chmod_dump_data () {
   echo "Ensuring dump permissions ..."
-  chmod 600 ${BACKUP_DIR}/${TIMESTAMP}_zammad_db.*.gz ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz
+  chmod 600 ${BACKUP_DIR}/${TIMESTAMP}_zammad_db.*.gz ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.${TAR_FILE_EXT}
 }
 
 function check_database_config_exists () {
@@ -292,7 +292,7 @@ function db_helper_warning () {
 }
 
 function get_restore_dates () {
-  RESTORE_FILE_DATES="$(find ${BACKUP_DIR} -type f -iname '*_zammad_files.tar.gz' | sed -e "s#${BACKUP_DIR}/##g" -e "s#_zammad_files.tar.gz##g" | sort)"
+  RESTORE_FILE_DATES="$(find ${BACKUP_DIR} -type f -iname "*_zammad_files.${TAR_FILE_EXT}" | sed -e "s#${BACKUP_DIR}/##g" -e "s#_zammad_files.${TAR_FILE_EXT}##g" | sort)"
 
   if [ "${DB_ADAPTER}" == "postgresql" ]; then
     DB_FILE_EXT="psql"
@@ -311,8 +311,8 @@ function choose_restore_date () {
     read -p 'File date: ' RESTORE_FILE_DATE
   fi
 
-  if [ ! -f "${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.tar.gz" ];then
-    echo -e "File ${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.tar.gz does not exist! \nRestore aborted!"
+  if [ ! -f "${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.${TAR_FILE_EXT}" ];then
+    echo -e "File ${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.${TAR_FILE_EXT} does not exist! \nRestore aborted!"
     exit 1
   fi
 
@@ -456,7 +456,7 @@ function restore_zammad () {
 
 function restore_files () {
   echo "# Restoring Files"
-  tar -C / --overwrite -xzf ${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.tar.gz
+  tar -C / --overwrite -x ${TAR_ZIP_ARG} -f ${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.${TAR_FILE_EXT}
 
   state=$?
 
