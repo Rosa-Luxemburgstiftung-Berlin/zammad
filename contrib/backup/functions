@@ -39,6 +39,20 @@ function demand_backup_conf () {
       echo "FULL_FS_DUMP is not set, falling back to 'yes' to produce a full backup."
     fi
   fi
+
+  # Ensure we have the old sane defaults for TAR args
+  if [ -z ${TAR_ZIP_ARG+x} ]; then
+    TAR_ZIP_ARG='-c'
+    if [ "${DEBUG}" == "yes" ]; then
+      echo "TAR_ZIP_ARG is not set, falling back to '-c' for gzip."
+    fi
+  fi
+  if [ -z ${TAR_FILE_EXT+x} ]; then
+    TAR_FILE_EXT='tar.gz'
+    if [ "${DEBUG}" == "yes" ]; then
+      echo "TAR_FILE_EXT is not set, falling back to 'tar.gz' for tar gzip."
+    fi
+  fi
 }
 
 function get_zammad_dir () {
