@@ -9,6 +9,12 @@ function help () {
     echo " $(basename $0) -d -D BACKUP_DIR -H HOLD_DAYS -F FULL_FS_DUMP -T TAR_ZIP_ARG -E TAR_FILE_EXT"
 }
 
+function helpr () {
+    echo ""
+    echo "Usage:"
+    echo " $(basename $0) -d -D BACKUP_DIR -T TAR_ZIP_ARG -E TAR_FILE_EXT"
+}
+
 function demand_backup_conf () {
   if [ -f "${BACKUP_SCRIPT_PATH}/config" ]; then
     # Ensure we're inside of our Backup-Script folder (see issue 2508)
