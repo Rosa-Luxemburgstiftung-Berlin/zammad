@@ -42,7 +42,7 @@ function demand_backup_conf () {
 
   # Ensure we have the old sane defaults for TAR args
   if [ -z ${TAR_ZIP_ARG+x} ]; then
-    TAR_ZIP_ARG='-c'
+    TAR_ZIP_ARG='-z'
     if [ "${DEBUG}" == "yes" ]; then
       echo "TAR_ZIP_ARG is not set, falling back to '-c' for gzip."
     fi
