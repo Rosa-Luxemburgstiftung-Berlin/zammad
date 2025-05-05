@@ -71,7 +71,9 @@ function delete_old_backups () {
   # Use -mmin to clean up files as -mtime (days) is too unprecise.
   #   However, add +60 minutes to allow for the backup script run time, so that
   #   backups created a few minutes more than a day ago are not already purged.
-  FILES_TO_DELETE=$(test -d ${BACKUP_DIR} && find ${BACKUP_DIR}/*_zammad_*.gz -type f -mmin +$(((60*24)*${HOLD_DAYS}+60)))
+  local -ri MMIN=$(((60*24)*${HOLD_DAYS}+60))
+  local -r FILES_TO_DELETE=$(test -d ${BACKUP_DIR} && \
+     find ${BACKUP_DIR}/ -name *_zammad_*.gz -type f -mmin +${MMIN} -o -name *_zammad_*.${TAR_FILE_EXT} -type f -mmin +${MMIN})
 
   if [[ -n ${FILES_TO_DELETE} ]]; then
     if [ "${DEBUG}" == "yes" ]; then
