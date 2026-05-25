@@ -492,6 +492,42 @@ function db_helper_alter_user () {
   fi
 }
 
+function pre_backup_exec () {
+  if [ -n ${PRE_BACKUP_EXEC+x} ]; then
+    if [ "${DEBUG}" == "yes" ]; then
+      echo "pre_backup_exec ${PRE_BACKUP_EXEC}"
+    fi
+    ${PRE_BACKUP_EXEC}
+  fi
+}
+
+function post_backup_exec () {
+  if [ -n ${POST_BACKUP_EXEC+x} ]; then
+    if [ "${DEBUG}" == "yes" ]; then
+      echo "pre_backup_exec ${POST_BACKUP_EXEC}"
+    fi
+    ${POST_BACKUP_EXEC}
+  fi
+}
+
+function pre_db_backup_exec () {
+  if [ -n ${PRE_DB_BACKUP_EXEC+x} ]; then
+    if [ "${DEBUG}" == "yes" ]; then
+      echo "pre_backup_exec ${PRE_DB_BACKUP_EXEC}"
+    fi
+    ${PRE_DB_BACKUP_EXEC}
+  fi
+}
+
+function pre_files_backup_exec () {
+  if [ -n ${PRE_FILES_BACKUP_EXEC+x} ]; then
+    if [ "${DEBUG}" == "yes" ]; then
+      echo "pre_backup_exec ${PRE_FILES_BACKUP_EXEC}"
+    fi
+    ${PRE_FILES_BACKUP_EXEC}
+  fi
+}
+
 function start_backup_message () {
     echo -e "\n# Zammad backup started - $(date)!\n"
 }
