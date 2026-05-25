@@ -493,7 +493,7 @@ function db_helper_alter_user () {
 }
 
 function pre_backup_exec () {
-  if [ -n ${PRE_BACKUP_EXEC+x} ]; then
+  if [ -n "${PRE_BACKUP_EXEC}" ]; then
     if [ "${DEBUG}" == "yes" ]; then
       echo "pre_backup_exec ${PRE_BACKUP_EXEC}"
     fi
@@ -502,7 +502,7 @@ function pre_backup_exec () {
 }
 
 function post_backup_exec () {
-  if [ -n ${POST_BACKUP_EXEC+x} ]; then
+  if [ -n "${POST_BACKUP_EXEC}" ]; then
     if [ "${DEBUG}" == "yes" ]; then
       echo "pre_backup_exec ${POST_BACKUP_EXEC}"
     fi
@@ -511,7 +511,7 @@ function post_backup_exec () {
 }
 
 function pre_db_backup_exec () {
-  if [ -n ${PRE_DB_BACKUP_EXEC+x} ]; then
+  if [ -n "${PRE_DB_BACKUP_EXEC}" ]; then
     if [ "${DEBUG}" == "yes" ]; then
       echo "pre_backup_exec ${PRE_DB_BACKUP_EXEC}"
     fi
@@ -520,7 +520,7 @@ function pre_db_backup_exec () {
 }
 
 function pre_files_backup_exec () {
-  if [ -n ${PRE_FILES_BACKUP_EXEC+x} ]; then
+  if [ -n "${PRE_FILES_BACKUP_EXEC}" ]; then
     if [ "${DEBUG}" == "yes" ]; then
       echo "pre_backup_exec ${PRE_FILES_BACKUP_EXEC}"
     fi
