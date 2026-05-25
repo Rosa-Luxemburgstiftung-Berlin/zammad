@@ -158,6 +158,15 @@ function check_empty_password () {
 function backup_files () {
   echo "creating file backup..."
 
+  # we try to keep the original code unchanged
+  local ZAMMAD_DIR="${ZAMMAD_DIR}"
+  if [ -n "${ALT_FILES_DIR}" ]; then
+    ZAMMAD_DIR="${ALT_FILES_DIR}"
+    if [ "${DEBUG}" == "yes" ]; then
+      echo "Will use ALT_FILES_DIR $ZAMMAD_DIR"
+    fi
+  fi
+
   if [ "${FULL_FS_DUMP}" == 'yes' ]; then
     echo " ... as full dump"
     tar -C / -c ${TAR_GZIP_ARG} -f ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz\
