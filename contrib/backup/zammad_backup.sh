@@ -29,9 +29,9 @@ backup_file_write_test
 
 delete_old_backups
 
-backup_files
-
 backup_db
+
+backup_files
 
 backup_chmod_dump_data
 
