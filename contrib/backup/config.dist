@@ -20,4 +20,4 @@ DEBUG='no'
 #  POST_BACKUP_EXEC=command to execute at the end of the backup script
 # alternative place to get the zammad files to backup from:
 # (used in backup_files and restore_files - so the VAR should be the same for both steps)
-#  BACKUP_FILES_DIR=/alternative/path
+#  ALT_FILES_DIR=/alternative/path
