@@ -9,3 +9,15 @@ BACKUP_DIR='/var/tmp/zammad_backup'
 HOLD_DAYS='10'
 FULL_FS_DUMP='no'
 DEBUG='no'
+
+
+# optional settings
+#
+# execute some commands:
+#  PRE_BACKUP_EXEC=command to execute at the start of the backup script
+#  PRE_DB_BACKUP_EXEC=command to execute before the DB backup is performed
+#  PRE_FILES_BACKUP_EXEC=command to execute before the files backup is performed
+#  POST_BACKUP_EXEC=command to execute at the end of the backup script
+# alternative place to get the zammad files to backup from:
+# (used in backup_files and restore_files - so the VAR should be the same for both steps)
+#  BACKUP_FILES_DIR=/alternative/path
