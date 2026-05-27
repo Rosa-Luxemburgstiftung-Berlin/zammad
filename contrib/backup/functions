@@ -445,7 +445,11 @@ function restore_zammad () {
 
 function restore_files () {
   echo "# Restoring Files"
-  tar -C / --overwrite -x ${TAR_GZIP_ARG} -f ${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.tar.gz
+  local TAR_CWD="/"
+  if [ -n "${ALT_FILES_DIR}" ]; then
+    TAR_CWD="${ZAMMAD_DIR}"
+  fi
+  tar -C ${TAR_CWD} --overwrite -x ${TAR_GZIP_ARG} -f ${BACKUP_DIR}/${RESTORE_FILE_DATE}_zammad_files.tar.gz
 
   state=$?
 
