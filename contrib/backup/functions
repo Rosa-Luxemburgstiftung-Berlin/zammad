@@ -160,21 +160,27 @@ function backup_files () {
 
   # we try to keep the original code unchanged
   local ZAMMAD_DIR="${ZAMMAD_DIR}"
+  local TAR_CWD="/"
   if [ -n "${ALT_FILES_DIR}" ]; then
-    ZAMMAD_DIR="${ALT_FILES_DIR}"
+    TAR_CWD="${ALT_FILES_DIR}"
+    ZAMMAD_DIR="."
     if [ "${DEBUG}" == "yes" ]; then
-      echo "Will use ALT_FILES_DIR $ZAMMAD_DIR"
+      echo "Will use ALT_FILES_DIR $ALT_FILES_DIR"
     fi
   fi
 
   if [ "${FULL_FS_DUMP}" == 'yes' ]; then
     echo " ... as full dump"
-    tar -C / -c ${TAR_GZIP_ARG} -f ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz\
+    tar -C ${TAR_CWD} -c ${TAR_GZIP_ARG} -f ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz\
       --exclude='tmp' --exclude 'node_modules' --exclude '.git' --exclude '.yarn/cache' --exclude='config/database.yml' ${ZAMMAD_DIR#/}
 
     state=$?
   else
     echo " ... only with productive data (attachments)"
+
+    if [ -n "${ALT_FILES_DIR}" ]; then
+      pushd ${ALT_FILES_DIR}
+    fi
 
     if [ ! -d "${ZAMMAD_DIR}/storage/" ]; then
       # Admin has requested an attachment backup only, however, there is no storage
@@ -195,7 +201,11 @@ function backup_files () {
       ZAMMAD_STORAGE_DIR="${ZAMMAD_DIR#/}/storage/"
     fi
 
-    tar -C / -c ${TAR_GZIP_ARG} -f ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz ${ZAMMAD_STORAGE_DIR}
+    if [ -n "${ALT_FILES_DIR}" ]; then
+      popd
+    fi
+
+    tar -C ${TAR_CWD} -c ${TAR_GZIP_ARG} -f ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz ${ZAMMAD_STORAGE_DIR}
 
     state=$?
   fi
